@@ -1,0 +1,6 @@
+.log
+.settings
+.project
+.tern-project
+.git
+/node_modules
