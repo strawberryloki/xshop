@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+<% include ./template/header %>
+    <% if (!user) { %>
+        <div class="hero-unit">
+            <h1>Welcome to Xinxin Shop</h1>
+            <p>It's a E-shop Test Program from David</p>
+            <p>
+                <a class="btn btn-primary btn-large" href="/login">Login</a>
+                <a class="btn btn-large" href="/reg">Register</a>
+            </p>
+        </div>
+        <% } else { %>
+            <% include say %>
+                <% } %>
+                    <% include posts %>
+<% include ./template/footer %>
