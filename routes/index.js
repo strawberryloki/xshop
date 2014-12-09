@@ -32,11 +32,21 @@ router.get('/', function (req, res) {
         }
         res.render('index', {
             title: 'X-Shop',
-            posts: posts,
         });
     });
 });
 
+/* GET home page. */
+router.get('/itemManager/dashboard', function (req, res) {
+    Post.get(null, function (err, posts) {
+        if (err) {
+            posts = [];
+        }
+        res.render('./itemManager/dashboard', {
+            title: 'X-Shop',
+        });
+    });
+});
 
 /* GET register page. */
 router.get('/reg', checkNotLogin);
