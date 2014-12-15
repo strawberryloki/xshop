@@ -5,7 +5,7 @@
                 <ul class="nav nav-sidebar">
                     <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a>
                     </li>
-                    <li><a href="#">Reports</a>
+                    <li><a href="./createItemCategory">Create Item Category</a>
                     </li>
                     <li><a href="#">Analytics</a>
                     </li>
@@ -34,6 +34,17 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+              
+    <% if (success) { %>
+        <div class="alert alert-success">
+             <%=success %>
+        </div>
+        <% } %>
+    <% if (error) { %>
+        <div class="alert alert-error">
+            <%=error %>
+        </div>
+    <% } %>
                 <h1 class="page-header">Dashboard</h1>
 
                 <div class="row placeholders">
@@ -189,5 +200,8 @@
                 </div>
             </div>
         </div>
+</div>
 
-        <% include ../template/footer %>
+        <% include ./template/footer %>
+        
+       

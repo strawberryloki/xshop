@@ -3,6 +3,7 @@ var User = require('../models/user.js');
 var router = express.Router();
 var crypto = require('crypto');
 var Post = require('../models/post.js');
+var ItemCategory =  require('../models/item/itemCategory.js');
 
 //============= Functions =================
 
@@ -38,14 +39,10 @@ router.get('/', function (req, res) {
 
 /* GET home page. */
 router.get('/itemManager/dashboard', function (req, res) {
-    Post.get(null, function (err, posts) {
-        if (err) {
-            posts = [];
-        }
+   
         res.render('./itemManager/dashboard', {
-            title: 'X-Shop',
+        	
         });
-    });
 });
 
 /* GET register page. */
@@ -144,17 +141,38 @@ router.post('/post', function (req, res) {
             req.session.error = err;
             return res.redirect('/');
         }
-        req.session.success = '发表成功';
+        req.session.success = 'successful';
         res.redirect('/u/' + currentUser.name);
+    });
+});
+
+
+/* GET post request. */
+router.get('/itemManager/createItemCategory', function (req, res) {
+	 res.render('./itemManager/createItemCategory', {
+	 });
+});
+
+/* POST post request. */
+router.post('/createItemCategory', function (req, res) {
+	var itemCategory = new ItemCategory(req.body.code, req.body.desc,new Date());
+	itemCategory.save(function (err) {
+        if (err) {
+            req.session.error = err;
+            return res.redirect('/');
+        }
+        req.session.success = 'Successful';
+        res.redirect('./itemManager/dashboard');
     });
 });
 
 
 /* GET User page. */
 router.get('/u/:user', function (req, res) {
+	
     User.get(req.params.user, function (err, user) {
         if (!user) {
-            req.session.error = '用户不存在';
+            req.session.error = 'user don\'t exist';
             return res.redirect('/');
         }
         Post.get(user.name, function (err, posts) {
