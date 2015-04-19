@@ -3,7 +3,6 @@ var User = require('../models/user.js');
 var router = express.Router();
 var crypto = require('crypto');
 var Post = require('../models/post.js');
-var ItemCategory =  require('../models/item/itemCategory.js');
 
 //============= Functions =================
 
@@ -143,26 +142,6 @@ router.post('/post', function (req, res) {
         }
         req.session.success = 'successful';
         res.redirect('/u/' + currentUser.name);
-    });
-});
-
-
-/* GET post request. */
-router.get('/itemManager/createItemCategory', function (req, res) {
-	 res.render('./itemManager/createItemCategory', {
-	 });
-});
-
-/* POST post request. */
-router.post('/createItemCategory', function (req, res) {
-	var itemCategory = new ItemCategory(req.body.code, req.body.desc,new Date());
-	itemCategory.save(function (err) {
-        if (err) {
-            req.session.error = err;
-            return res.redirect('/');
-        }
-        req.session.success = 'Successful';
-        res.redirect('./itemManager/dashboard');
     });
 });
 

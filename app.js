@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var itemManager = require('./routes/itemManager');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var settings = require('./settings');
@@ -47,7 +47,11 @@ app.use(function(req, res, next) {
 
 	// var error = req.session.error;
 	// var success = req.session.success;
-
+	if(req.session.edit !== undefined){
+		console.info('edit ' + req.session.edit.code);
+	}
+	res.locals.edit = (req.session.edit !== null) ? req.session.edit : null;
+	res.locals.category = (req.session.category !== null) ? req.session.category : null;
 	res.locals.error = (req.session.error !== null) ? req.session.error : null;
 	res.locals.success = (req.session.success !== null) ? req.session.success
 			: null;
@@ -62,6 +66,8 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+
+app.use('/itemManager',itemManager);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,123 @@
+<% include ../../template/header %>
+    <div class="container-fluid">
+        <% include ../template/sidebar %>
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+                <form class="form-inline" method="post" role="form" action="./test">
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="input-group" style=" margin-left: 15px; width: 650px;">
+
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">类别</div>
+                                <select class="form-control" name="select1" id="cate">
+                                    <option value='allCategory'>All Category</option>
+                                    <option value='CategoryA'>Category A</option>
+                                    <option value='allCategory'>Category B</option>
+                                </select>
+                                <div class="input-group-addon">子类</div>
+                                <select class="form-control" name="select2" id="cate2">
+                                    <option value='allCategory'>All SubCategory</option>
+                                    <option value='allCategory'>Category SubCategory A</option>
+                                    <option value='allCategory'>Category SubCategory B</option>
+                                </select>
+                                <div class="input-group-addon">品牌</div>
+                                <select class="form-control" name="select3" id="cate3">
+                                    <option value='allCategory'>All Brand</option>
+                                    <option value='allCategory'>Brand A</option>
+                                    <option value='allCategory'>Brand B</option>
+                                </select>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="row" style=" margin-top: 20px;">
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group" style=" margin-left: 15px;">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">商品代码</div>
+                                <input type="text" class="form-control" name = "code" placeholder="商品代码">
+                            </div>
+
+                            <div class="input-group" style=" margin-left: 15px;">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">名称</div>
+                                <input type="text" class="form-control" name = "pname" placeholder="名称">
+
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row" style=" margin-top: 20px;">
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel panel-info" style=" width: 650px;">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading"><span style=" margin-right: 5px;">商品规格 </span> <nb/><button type="button" class="btn btn-default" style="border:none;padding:0;background:none;" id="addrow"><span class="glyphicon glyphicon-plus" aria-hidden="false" style="border:none;"></span></button></div>
+
+                        <!--
+                         Table 
+                        <table class="table">
+                            
+                        </table>
+-->
+                        <table class="table" style=" width: 650px;">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:50px">规格</th>
+                                    <th style="min-width:80px">参考价格</th>
+                                    <th style="min-width:50px">备注</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="word-break:break-all; word-wrap:break-all;" id="tablebody">
+                               <tr>
+                                <td>
+                                    <input type="text" class="form-control" name="size" placeholder="规格">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="cost" placeholder="参考价格">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="comment" placeholder="备注">
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                        <button type="submit" class="btn btn-default">新建</button>
+                </form>
+
+
+            </div>
+    </div>
+
+<script type="text/javascript">
+     $(document).ready(function(){
+         var index = 2
+        
+         $('#addrow').click(function () {
+                
+                        $('#tablebody').append("<tr><td><input type=\"text\" class=\"form-control\" " + "name=\"size" +  "\" " + " placeholder=\"规格\"></td>"+
+                                "<td><input type=\"text\" class=\"form-control\" " + "name=\"cost" +  "\" " + "placeholder=\"参考价格\"></td><td>"+
+                                "<input type=\"text\" class=\"form-control\" " + "name=\"comment" + "\" " + " placeholder=\"备注\"></td></tr>");
+                index++;
+                    });
+     });
+    </script>
+    <% include ../template/footer %>

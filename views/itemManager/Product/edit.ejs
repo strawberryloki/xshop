@@ -1,0 +1,260 @@
+<% include ../../template/header %>
+    <div class="container-fluid">
+        <% include ../template/sidebar %>
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+             <% if (success) { %>
+                                <div id ="success" class="alert alert-success">
+                                    <%=success %>
+                                </div>
+                                <% } %>
+                                    <% if (error) { %>
+                                        <div id="error" class="alert alert-danger">
+                                            <%=error%>
+                                        </div>
+                                        <% } %>
+                <div class="alert alert-danger" id ="validate" style="display:none" ></div>
+                <form  class="form-inline" method="post" role="form" action="../edit">
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="input-group" style=" margin-left: 15px; width: 650px;">
+
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">类别</div>
+                                <select class="form-control" name="select1" id="cate">
+                                       <% itemCategories.forEach(function(itemCategory, index) { %>
+                                          <option value="<%=itemCategory['code'] %>" <% if(product.sub_category.category.code === itemCategory['code'] ) {  %> selected <% } %> ><%=itemCategory['desc'] %></option>
+                                       <% }) %>
+                                </select>
+                                <div class="input-group-addon">子类</div>
+                                <select class="form-control" name="select2" id="cate2">
+                                       <% subCategories.forEach(function(subCategory, index) { %>
+                                        <option value="<%=subCategory['_id'] %>" 
+                                                <% if(product.sub_category.code === subCategory['code']) { %> 
+                                            selected 
+                                            <% } %> ><%=subCategory['desc'] %></option>
+                                       <% }) %>
+                                </select>
+                                <span id="ori"  style="display:none"><%=product.sub_category.code %></span>
+                                <div class="input-group-addon">品牌</div>
+                                <select class="form-control" name="select3" id="cate3">
+                                        <% brands.forEach(function(brand, index) { %>
+                                        <option value="<%=brand['_id'] %>" <% if(product.brand.code === brand['code']) {  %> selected <% } %>><%=brand['desc'] %></option>
+                                        <% }) %>
+                                </select>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="row" style=" margin-top: 20px;">
+                        </div>
+
+                        <div class="row">
+                            <div class="input-group" style=" margin-left: 15px;">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">商品代码</div>
+                                <input type="text" class="form-control" id="code" name ="code" placeholder="商品代码" value ="<%=product['code'] %>" >
+                            </div>
+
+                            <div class="input-group" style=" margin-left: 15px;">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </div>
+                                <div class="input-group-addon">名称</div>
+                                <input type="text" class="form-control" id="pname" name = "pname" placeholder="名称" value ="<%=product['name'] %>">
+
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row" style=" margin-top: 20px;">
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel panel-info" style=" width: 700px;">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading"><span style=" margin-right: 5px;">商品规格 </span> <nb/><button type="button" class="btn btn-default" style="border:none;padding:0;background:none;" id="addrow"><span class="glyphicon glyphicon-plus" aria-hidden="false" style="border:none;"></span></button></div>
+
+                        <!--
+                         Table 
+                        <table class="table">
+                            
+                        </table>
+-->
+                        <table class="table" style=" width: 700px;">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:50px">规格</th>
+                                    <th style="min-width:80px">参考价格</th>
+                                    <th style="min-width:50px">备注</th>
+                                    <th style="min-width:50px">删除</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="word-break:break-all; word-wrap:break-all;" id="tablebody">
+                               <% product.sizes.forEach(function(size, index) { %>
+                                <tr>
+                                <td>
+                                    <input type="text" class="form-control" name="size" placeholder="规格" value="<%=size['size'] %>">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="cost" placeholder="参考价格" value="<%=size['cost'] %>">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="comment" placeholder="备注" value="<%=size['comment'] %>">
+                                </td>
+                                 <% if(index > 0) { %>
+                                    <td>
+                                    <button type="button" class="btn btn-default deleteline" style="border:none;padding:0;background:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>
+                                </td>
+                                     <% } %>
+                                </tr>
+                              <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                        <button id="create" type="button" class="btn btn-default">更新</button>
+                        <a href="../view" class="btn btn-default">取消并返回</a>
+                </form>
+
+
+            </div>
+    </div>
+
+<script type="text/javascript">
+     $(document).ready(function(){
+         var orisub = $('#ori').text();
+         var code = $("#cate :selected").val();
+                console.log("code: " + code);
+                $.post('../ajax', {
+                        code: code
+                    },
+                    function (subCategories) {
+                        console.log('process sucess');
+                        console.log(subCategories);
+                        
+                        var table ="";
+                        subCategories.forEach(function (subCategory, index) {
+                            var temp = "";
+                            if(subCategory.code === orisub){
+                            temp ="<option value=\"" +subCategory._id + "\" selected >" +subCategory.desc + "</option>";
+                            }else {
+                            temp ="<option value=\"" +subCategory._id + "\" >" +subCategory.desc + "</option>";
+                            }
+                            table = table + temp;
+                        
+                        });
+                        var after = "<select class=\"form-control\" name=\"select2\" " +"id=\"cate2\">"+table+"</select>";
+                        $('#cate2').replaceWith(after);
+
+                    });
+         
+         
+         $('#addrow').click(function () {
+                
+                        $('#tablebody').append("<tr><td><input type=\"text\" class=\"form-control\" " + "name=\"size" +  "\" " + " placeholder=\"规格\"></td>"+
+                                "<td><input type=\"text\" class=\"form-control\" " + "name=\"cost" +  "\" " + "placeholder=\"参考价格\"></td><td>"+
+                                "<input type=\"text\" class=\"form-control\" " + "name=\"comment" + "\" " + " placeholder=\"备注\"></td>"+                                     "<td><button type=\"button\" class=\"btn btn-default deleteline\" onclick= \" $(this).parent().parent().remove() \" style=\"border:none;padding:0;background:none;\"><span class=\"glyphicon glyphicon-remove \" aria-hidden=\"true\"></span></button></td></tr>"
+                                              );
+                    });
+         
+         
+     });
+    
+     $('#cate').change(function () {
+                var code = $("#cate :selected").val();
+                console.log("code: " + code);
+                $.post('../ajax', {
+                        code: code
+                    },
+                    function (subCategories) {
+                        console.log('process sucess');
+                        console.log(subCategories);
+                        
+                        var table ="";
+                        subCategories.forEach(function (subCategory, index) {
+                            var temp ="<option value=\"" +subCategory._id + "\" >" +subCategory.desc + "</option>";
+                            table = table + temp;
+                        
+                        });
+                        var after = "<select class=\"form-control\" name=\"select2\" " +"id=\"cate2\">"+table+"</select>";
+                        $('#cate2').replaceWith(after);
+
+                    });
+            });
+    
+     $('.deleteline').click(function(){
+         console.log('delete line');
+        $(this).parent().parent().remove();
+     });
+     $('#create').click(function(){
+        var validate = true;
+         $('#success').remove();
+         $('#error').remove();
+        $('#validate').text("");
+        var message = "";
+        $('#validate').hide();
+        var cate = $("#cate :selected").text().trim();
+        var sub_cate = $("#cate2 :selected").text().trim();
+        var brand = $("#cate3 :selected").text().trim();
+        var code =  $("#code").val().trim();
+        var pname =  $("#pname").val().trim();
+         
+        if(cate==="" || sub_cate==="" || brand==="" || code==="" || pname==="" ){
+                
+            validate = false;
+            message = "请输入完整资料！";
+            $('#validate').text(message);
+            $('#validate').show();
+            return;
+        }
+
+         
+        var size = [];
+        $("input[name='size']").each(function() {
+            if($(this).val().trim()===""){
+                validate = false;
+                message = "请输入规格！";
+                $('#validate').text(message);
+                $('#validate').show();
+                return;
+            }
+            
+            size.push($(this).val().trim());
+        });
+        var cost = [];
+        $("input[name='cost']").each(function() {
+            if($.isNumeric($(this).val().trim())=== false && $(this).val().trim()!== ""){
+                validate = false;
+                message = "参考价格必须是数字！";
+                $('#validate').text(message);
+                $('#validate').show();
+                return;
+            }
+            cost.push($(this).val().trim());
+        });
+        var comment =[];
+        $("input[name='comment']").each(function() {
+            comment.push($(this).val().trim());
+        });
+        
+        
+        if(validate){
+            $('form').submit();
+        };
+          
+         
+     });
+    
+    
+    </script>
+    <% include ../template/footer %>

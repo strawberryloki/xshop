@@ -1,0 +1,55 @@
+<% include ../../template/header %>
+    <div class="container-fluid">
+        <% include ../template/sidebar %>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+                <% if (error) { %>
+                    <div class="alert alert-danger">
+                        <%=error %>
+                    </div>
+                    <% } %>
+
+                        <div class="table-responsive">
+
+                            <form method="post" role="form" action="../edit">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Code</th>
+                                            <th>Description</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>
+                                                <%=subCategory[ 'category'].code %>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="code" name="code" value="<%= subCategory['code'] %>">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="desc" name="desc" value="<%= subCategory['desc'] %>">
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="btn btn-default">保存修改</button>
+                                <a id="cancel" href="../create/allCategory" class="btn btn-default">取消</a>
+                            </form>
+                        </div>
+            </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if(sessionStorage['category'] !== undefined){
+            $('#cancel').attr("href", "../create/" + sessionStorage['category']);
+            }
+        });
+    </script>
+    <% include ../template/footer %>

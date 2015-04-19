@@ -1,0 +1,141 @@
+<% include ../../template/header %>
+    <div class="container-fluid">
+        <% include ../template/sidebar %>
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+                <% if (success) { %>
+                    <div class="alert alert-success">
+                        <%=success %>
+                    </div>
+                    <% } %>
+                        <% if (error) { %>
+                            <div class="alert alert-danger">
+                                <%=error %>
+                            </div>
+                            <% } %>
+                                <form method="post" role="form" action="../create" class="well form-inline center" style="text-align:center;">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                        
+                                            <div class="input-group-addon">Category</div>
+                                           <select class="form-control"  name="category">
+                                               <% itemCategories.forEach(function(itemCategory, index) { %>
+                                                  <option value=<%=itemCategory['_id'] %>><%=itemCategory['desc'] %></option>
+                                               <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label class="sr-only" for="code">Code</label>
+                                            <div class="input-group-addon">CODE</div>
+                                            <input type="text" class="form-control" id="code" name="code" placeholder="Enter Category Code">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label class="sr-only" for="desc">Desciption</label>
+                                            <input type="text" class="form-control" id="desc" name="desc" placeholder="Enter Desciption">
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-default">新建</button>
+
+                                </form>
+                
+                
+                
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">Category</div>
+                                            <select class="form-control" name="select" id="cate">
+                                               <option value='allCategory'>All Category</option>
+                                               <% itemCategories.forEach(function(itemCategory, index) { %>
+                                                  <option value=<%=itemCategory['code'] %>><%=itemCategory['desc'] %></option>
+                                               <% }) %>
+                                            </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="table-responsive">
+                                    <form method="post" role="form" action="../delete" >
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Select</th>
+                                                    <th>Edit</th>
+                                                    <th>Category</th>
+                                                    <th>Code</th>
+                                                    <th>Description</th>
+                                                    <th>Create Date</th>
+                                                    <th>Last Update Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subCategoriesData">
+
+                                                <% subCategories.forEach(function(subCategory, index) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" name="del" id="blankCheckbox" value="<%= subCategory['_id'] %>">
+                                                        </td>
+                                                        <td><a href="../edit/<%= subCategory['_id'] %>"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                                        </td>
+                                                        <td>
+                                                            <%=subCategory['category'].desc %>
+                                                        </td>
+                                                        <td>
+                                                            <%=subCategory['code'] %>
+                                                        </td>
+                                                        <td>
+                                                            <%=subCategory['desc'] %>
+                                                        </td>
+                                                        <td>
+                                                            <%=subCategory['created_date'] %>
+                                                        </td>
+                                                        <td>
+                                                            <%=subCategory['last_updated_date'] %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+
+
+                                            </tbody>
+                                        </table>
+                                         <button type="submit" class="btn btn-default">删除所选</button>
+                                    </form>
+                                </div>
+            </div>
+    </div>
+
+    <script type="text/javascript">
+     $(document).ready(function(){
+        var selected = $(location).attr('pathname').toString().substring($(location).attr('pathname').lastIndexOf('/') + 1);
+//        alert(selected);
+         $('#cate').val(selected);
+         $('#cate').change(function () {
+                var code = $("#cate :selected").val();
+                console.log("code: " + code);
+                sessionStorage['category']=code;
+                $.post('./ajax', {
+                        code: code
+                    },
+                    function (subCategories) {
+                        console.log('process sucess');
+                        console.log(subCategories);
+                        
+                        var table ="";
+                        subCategories.forEach(function (subCategory, index) {
+                            var temp ="<tr><td><input type=\"checkbox\" name=\"del\" id=\"blankCheckbox\" value=\""+ subCategory._id + "\"></td><td><a href=\"" + "../edit/" + subCategory._id + "\"" + "><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a></td><td>"+subCategory.category.desc + "</td><td>"+subCategory.code+" </td><td>"+subCategory.desc+"</td><td>"+subCategory.created_date+"</td><td>"+subCategory.last_updated_date+"</td></tr>";
+                            table = table + temp;
+                        
+                        });
+                        var after = "<tbody id=\"subCategoriesData\">"+table+"</tbody>";
+                        $('#subCategoriesData').replaceWith(after);
+
+                    });
+            });
+     });
+    </script>
+    <% include ../template/footer %>

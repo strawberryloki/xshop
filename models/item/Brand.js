@@ -1,5 +1,5 @@
 /**
- * For ItemCategory Model
+ * For Brand Model
  */
 var MongoClient = require('mongodb').MongoClient;
 var BSON =  require('mongodb').BSONPure;
@@ -7,7 +7,7 @@ var settings = require('../../settings');
 var Utils = require('../utils');
 
 
-function ItemCategory(_id, code, desc, created_date, last_updated_date) {
+function Brand(_id, code, desc, created_date, last_updated_date) {
 	this._id = _id;
 	this.code = code;
 	this.desc = desc;
@@ -15,11 +15,11 @@ function ItemCategory(_id, code, desc, created_date, last_updated_date) {
 	this.last_updated_date = last_updated_date;
 }
 
-module.exports = ItemCategory;
+module.exports = Brand;
 
-ItemCategory.prototype.save = function save(callback) {
+Brand.prototype.save = function save(callback) {
 	
-	var itemCategory = {
+	var brand = {
 			code : this.code,
 			desc : this.desc,
 			created_date :  new Date(),
@@ -32,7 +32,7 @@ ItemCategory.prototype.save = function save(callback) {
 			return callback(err);
 		}
 
-		db.collection('item_category', function(err, collection) {
+		db.collection('brand', function(err, collection) {
 			if (err) {
 				db.close();
 				return callback(err);
@@ -44,16 +44,16 @@ ItemCategory.prototype.save = function save(callback) {
                     console.log('Error:' + err);
                 });
 			
-			collection.insert(itemCategory, function(err, itemCategory) {
+			collection.insert(brand, function(err, brand) {
 				
 				if (err) {
 					db.close();
 					return callback(err);
 				}
 				
-				callback(null, itemCategory);
+				callback(null, brand);
 
-				db.close(function(err, itemCategory) {
+				db.close(function(err, brand) {
 				});
 			});
 
@@ -62,22 +62,22 @@ ItemCategory.prototype.save = function save(callback) {
 };
 
 
-ItemCategory.prototype.update = function(callback) {
-	var itemCategory = {
+Brand.prototype.update = function(callback) {
+	var brand = {
 		    _id : this._id,
 			code : this.code,
 			desc : this.desc,
 			created_date :  this.created_date,
 			last_updated_date : new Date()
 	};
-	var o_id = new BSON.ObjectID(itemCategory._id);
+	var o_id = new BSON.ObjectID(brand._id);
 	
 	MongoClient.connect(settings.url, function(err, db) {
 		if (err) {
 			return callback(err);
 		}
 		
-		db.collection('item_category', function(err, collection) {
+		db.collection('brand', function(err, collection) {
 			if (err) {
 				db.close();
 				return callback(err);
@@ -89,17 +89,17 @@ ItemCategory.prototype.update = function(callback) {
                     console.log('Error:' + err);
                 });
 			
-			collection.update({"_id":o_id}, {"code":itemCategory.code, "desc":itemCategory.desc, "created_date":itemCategory.created_date, "last_updated_date": itemCategory.last_updated_date}, function(err, itemCategory) {
+			collection.update({"_id":o_id}, {"code":brand.code, "desc":brand.desc, "created_date":brand.created_date, "last_updated_date": brand.last_updated_date}, function(err, brand) {
 
 				if (err) {
 					db.close();
 					return callback(err);
 				}
 				
-				callback(null, itemCategory);
+				callback(null, brand);
 
 
-				db.close(function(err, itemCategory) {
+				db.close(function(err, brand) {
 				});
 			});
 
@@ -108,7 +108,7 @@ ItemCategory.prototype.update = function(callback) {
 };
 
 
-ItemCategory.remove = function(delIds, callback) {
+Brand.remove = function(delIds, callback) {
 	
 	var temp = [];
 	if(!(delIds instanceof Array)){
@@ -129,7 +129,7 @@ ItemCategory.remove = function(delIds, callback) {
 		if (err) {
 			return callback(err);
 		}
-		db.collection('item_category', function(err, collection) {
+		db.collection('brand', function(err, collection) {
 			if (err) {
 				db.close();
 				return callback(err);
@@ -146,7 +146,7 @@ ItemCategory.remove = function(delIds, callback) {
 				
 
 
-				db.close(function(err, itemCategory) {
+				db.close(function(err, brand) {
 				});
 			});
 
@@ -155,14 +155,14 @@ ItemCategory.remove = function(delIds, callback) {
 };
 
 
-ItemCategory.getAll = function(callback){
+Brand.getAll = function(callback){
 	
 	
 	MongoClient.connect(settings.url, function (err, db) {
         if (err) {
             return callback(err);
         }
-        db.collection('item_category', function (err, collection) {
+        db.collection('brand', function (err, collection) {
             if (err) {
                 db.close();
                 return callback(err);
@@ -175,12 +175,12 @@ ItemCategory.getAll = function(callback){
                 if (err) {
                     callback(err, null);
                 }
-                var itemCategories = [];
+                var brands = [];
                 docs.forEach(function (doc, index) {
-                    var itemCategory = new ItemCategory(doc._id, doc.code, doc.desc, Utils.dateFormatter(doc.created_date), Utils.dateFormatter(doc.last_updated_date));
-                    itemCategories.push(itemCategory);
+                    var brand = new Brand(doc._id, doc.code, doc.desc, Utils.dateFormatter(doc.created_date), Utils.dateFormatter(doc.last_updated_date));
+                    brands.push(brand);
                 });
-                callback(null, itemCategories);
+                callback(null, brands);
             });
         });
     });
@@ -188,14 +188,14 @@ ItemCategory.getAll = function(callback){
 
 
 
-ItemCategory.getOne = function(id,callback){
-	console.info('id: ' + id);
+Brand.getOne = function(id,callback){
+	console.info('brand_id: ' + id);
 	var o_id = new BSON.ObjectID(id);
 	MongoClient.connect(settings.url, function (err, db) {
         if (err) {
             return callback(err);
         }
-        db.collection('item_category', function (err, collection) {
+        db.collection('brand', function (err, collection) {
             if (err) {
                 db.close();
                 return callback(err);
@@ -211,8 +211,8 @@ ItemCategory.getOne = function(id,callback){
             	
             	console.info('doc: ' + doc.code);
             	db.close();
-            	var itemCategory = new ItemCategory(doc._id, doc.code, doc.desc, doc.created_date, doc.last_updated_date);
-            	callback(null, itemCategory);
+            	var brand = new Brand(doc._id, doc.code, doc.desc, doc.created_date, doc.last_updated_date);
+            	callback(null, brand);
               });
             
            

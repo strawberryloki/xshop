@@ -51,6 +51,7 @@ Post.prototype.save = function save(callback) {
         });
     });
 };
+
 Post.get = function get(username, callback) {
 
 	MongoClient.connect(settings.url, function (err, db) {

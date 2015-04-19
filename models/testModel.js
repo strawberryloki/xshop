@@ -1,15 +1,7 @@
 /**
  * New node file
  */
-var user = {name:"zhangs", age:10, 'intro':"He is the world's best players."}, userinfo = '';
-for (var p in user) {
-    userinfo += p + ':' + user[p] + '  '; 
-}
-alert(userinfo);
-		
-delete user.name;
-userinfo = '';
-for (var p in user) {
-    userinfo += p + ':' + user[p] + '  '; 
-}
-alert(userinfo);
+
+var ItemCategory = require('./item/ItemCategory');
+
+ItemCategory.getAll(function(e1,e2){});
